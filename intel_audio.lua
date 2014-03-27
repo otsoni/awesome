@@ -19,3 +19,24 @@ function get_connected_HDMI ()
     end
     return connected
 end
+
+function list_devices ()
+    devices = {}
+    devices[1] = {}
+    devices[1][1] = "Analog audio"
+    devices[1][2] = "pacmd set-card-profile 0 output:analog-stereo"
+    next_index = 2
+    hdmi_connected = get_connected_HDMI()
+    for i=1,3 do
+        if hdmi_connected == 1 then
+            local ending = ""
+            if i > 1 then
+                ending = "-extra"..i-1
+            end
+            devices[next_index][1] = "HDMI "..i
+            devices[next_index][2] = "pacmd set-card-profile 0 output:hdmi-stereo"..ending
+            next_index = next_index+1
+        end
+    end
+    return devices
+end
